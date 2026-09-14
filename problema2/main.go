@@ -29,8 +29,9 @@ func secuencial(durs []time.Duration) time.Duration {
 func concurrente(durs []time.Duration) time.Duration {
 	inicio := time.Now()
 	var wg sync.WaitGroup
-	// TODO: lanzar cada tarea en su propia goroutine y esperar con WaitGroup
+
 	for i, d := range durs {
+		wg.Add(1)
 		go func(id int, duration time.Duration) {
 			defer wg.Done()
 			tarea(id, duration)
@@ -42,12 +43,14 @@ func concurrente(durs []time.Duration) time.Duration {
 
 func main() {
 	// TODO: experimenta con diferentes duraciones
-	// durs := []time.Duration{700 * time.Millisecond, 500 * time.Millisecond, 1 * time.Second}
-
+	durs := []time.Duration{1 * time.Second, 3 * time.Second, 6 * time.Second}
+	//modificaciones para el tiempo fueron:1,3,6
 	// d1 :=
+	d1 := secuencial(durs)
 	fmt.Println("Duración SEC:", d1)
 
 	// d2 :=
+	d2 := concurrente(durs)
 	fmt.Println("Duración CONC:", d2)
 
 	fmt.Println("Nota: la ejecución concurrente debería ser ~max(durs). Cambia valores y observa.")
