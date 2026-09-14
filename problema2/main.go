@@ -18,7 +18,7 @@ func tarea(id int, dur time.Duration) {
 
 func secuencial(durs []time.Duration) time.Duration {
 	inicio := time.Now()
-	// TODO: ejecutar las tareas en orden, sin goroutines
+
 	for i, d := range durs {
 		tarea(i, d)
 
@@ -31,7 +31,10 @@ func concurrente(durs []time.Duration) time.Duration {
 	var wg sync.WaitGroup
 	// TODO: lanzar cada tarea en su propia goroutine y esperar con WaitGroup
 	for i, d := range durs {
-
+		go func(id int, duration time.Duration) {
+			defer wg.Done()
+			tarea(id, duration)
+		}(i, d)
 	}
 	wg.Wait()
 	return time.Since(inicio)
