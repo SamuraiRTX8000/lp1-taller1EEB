@@ -20,6 +20,7 @@ func secuencial(durs []time.Duration) time.Duration {
 	inicio := time.Now()
 	// TODO: ejecutar las tareas en orden, sin goroutines
 	for i, d := range durs {
+		tarea(i, d)
 
 	}
 	return time.Since(inicio)
@@ -40,10 +41,10 @@ func main() {
 	// TODO: experimenta con diferentes duraciones
 	// durs := []time.Duration{700 * time.Millisecond, 500 * time.Millisecond, 1 * time.Second}
 
-	// d1 := 
+	// d1 :=
 	fmt.Println("Duración SEC:", d1)
 
-	// d2 := 
+	// d2 :=
 	fmt.Println("Duración CONC:", d2)
 
 	fmt.Println("Nota: la ejecución concurrente debería ser ~max(durs). Cambia valores y observa.")
