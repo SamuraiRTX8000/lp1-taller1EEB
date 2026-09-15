@@ -64,6 +64,7 @@ func main() {
 
 	// precarga
 	for _, k := range claves {
+		db.m[k] = rand.Intn(100)
 
 	}
 
