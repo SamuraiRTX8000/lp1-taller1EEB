@@ -12,14 +12,14 @@ import (
 // Practicar cierre de canal y uso de WaitGroup.
 // TODO: completa los pasos marcados.
 
-func productor(n int, out chan<- int) {
-	defer close(out) // TODO: cerrar el canal cuando no haya más datos
-	for i := 1; i <= n; i++ {
+func productor(n int, out chan<- int) { //out es el canal para recibir int
+	defer close(out)
+	for i := 1; i <= n; i++ { //n el numero de datos que va a generar
 		v := rand.Intn(100)
 		fmt.Printf("[productor] envía %d\n", v)
-		out <- v
-		// TODO: dormir un poco para ver el flujo
-		// usa Sleep con un valor aleatorio entre 100 y 500 ms
+		out <- v //EL canal recibe los datos aleatorios de V
+
+		time.Sleep(time.Duration(rand.Intn(400)+100) * time.Millisecond)
 	}
 }
 
