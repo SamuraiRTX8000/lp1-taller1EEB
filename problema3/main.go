@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"sync"
+	"sync/atomic"
 )
 
 // Objetivo: Provocar condición de carrera incrementando un contador desde múltiples goroutines,
@@ -21,7 +22,7 @@ func incrementarInseguro(nGoroutines, nIncrementos int) int64 {
 		go func() {
 
 			for j := 0; j < nIncrementos; j++ {
-				
+
 				contador = contador + 1
 
 			}
@@ -37,18 +38,18 @@ func incrementarInseguro(nGoroutines, nIncrementos int) int64 {
 // Variante con Mutex:
 func incrementarConMutex(nGoroutines, nIncrementos int) int64 {
 	var contador int64 = 0
-	 var mu
-	 var wg
+	var mu sync.Mutex
+	var wg sync.WaitGroup
 	wg.Add(nGoroutines)
 
 	for i := 0; i < nGoroutines; i++ {
 		go func() {
 			defer wg.Done()
 			for j := 0; j < nIncrementos; j++ {
-				
-				mu.Lock
+
+				mu.Lock()
 				contador = contador + 1
-				mu.Unlock
+				mu.Unlock()
 
 			}
 		}()
@@ -69,6 +70,7 @@ func incrementarConAtomic(nGoroutines, nIncrementos int) int64 {
 			defer wg.Done()
 			for j := 0; j < nIncrementos; j++ {
 				// TODO: usar atomic.AddInt64(&contador, 1)
+				atomic.AddInt64(&contador, 1)
 
 			}
 		}()
