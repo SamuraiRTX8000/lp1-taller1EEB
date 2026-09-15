@@ -25,10 +25,9 @@ func productor(n int, out chan<- int) { //out es el canal para recibir int
 
 func consumidor(id int, in <-chan int, wg *sync.WaitGroup) {
 	defer wg.Done()
-	for v := range in { // TODO: leer hasta que canal se cierre
+	for v := range in {
 		fmt.Printf("[consumidor %d] recibe %d\n", id, v)
-		// TODO: simular trabajo
-		// usa Sleep con un valor aleatorio entre 100 y 500 ms
+
 		time.Sleep(time.Duration(rand.Intn(400)+100) * time.Millisecond)
 	}
 	fmt.Printf("[consumidor %d] canal cerrado, termina\n", id)
@@ -39,11 +38,10 @@ func main() {
 	valores := 10
 	consumidores := 3
 
-	ch := make(chan int, 2) // TODO: prueba cambiar a canal bufferizado: make(chan int, 4)
-
+	ch := make(chan int, 2) // el experimeto lo puse con 2
 	var wg sync.WaitGroup
 	wg.Add(consumidores)
-	// TODO: lanzar las goroutines consumidoras
+
 	for i := 1; i <= consumidores; i++ {
 		go consumidor(i, ch, &wg)
 
