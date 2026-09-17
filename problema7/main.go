@@ -38,7 +38,7 @@ func worker(id int, jobs <-chan trabajo, results chan<- resultado, wg *sync.Wait
 
 	}
 	fmt.Printf("[worker %d] no hay más trabajos\n", id)
-}
+} //(LISTO)
 
 func main() {
 	nTrabajos := 12
@@ -49,21 +49,18 @@ func main() {
 
 	var wg sync.WaitGroup
 
-	// TODO: lanzar nWorkers workers
 	wg.Add(nWorkers)
 	for i := 1; i <= nWorkers; i++ {
-
+		go worker(i, jobs, results, &wg)
 	}
 
-	// TODO: productor de trabajos
 	go func() {
 		for i := 1; i <= nTrabajos; i++ {
-
+			jobs <- trabajo{ID: i, X: i}
 		}
 		close(jobs) // importante: cerrar para que los workers terminen
 	}()
 
-	// TODO: recolectar resultados en otra goroutine y cerrar results al final
 	var wgCollect sync.WaitGroup
 	wgCollect.Add(1)
 	go func() {
