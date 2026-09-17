@@ -93,6 +93,6 @@ func main() {
 	fmt.Println("=== Elige una sección para ejecutar ===")
 	// TODO: comenta/activa la versión que desees probar
 
-	// deadlock()      // <- provocará interbloqueo
-	seguroOrdenado() // <- versión segura
+	deadlock() // <- provocará interbloqueo
+	//seguroOrdenado() // <- versión segura
 }
