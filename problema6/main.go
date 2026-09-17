@@ -18,24 +18,28 @@ func deadlock() {
 
 	go func() {
 		defer wg.Done()
-		fmt.Println("G1: Lock mu1") 
-		// TODO: adquirir mu1
+		fmt.Println("G1: Lock mu1")
+
+		mu1.Lock()
 
 		time.Sleep(100 * time.Millisecond) // fuerza entrelazado
-		fmt.Println("G1: Lock mu2") 
-		// TODO: adquirir mu2
+		fmt.Println("G1: Lock mu2")
+
+		mu2.Lock()
 
 		fmt.Println("G1: listo")
 	}()
 
 	go func() {
 		defer wg.Done()
-		fmt.Println("G2: Lock mu2") 
-		// TODO: adquirir mu2
+		fmt.Println("G2: Lock mu2")
+
+		mu2.Lock()
 
 		time.Sleep(100 * time.Millisecond)
-		fmt.Println("G2: Lock mu1") 
-		// TODO: adquirir mu1
+		fmt.Println("G2: Lock mu1")
+
+		mu1.Lock()
 
 		fmt.Println("G2: listo")
 	}()
@@ -53,11 +57,14 @@ func seguroOrdenado() {
 	lockEnOrden := func(a, b *sync.Mutex) func() func() {
 		// retorna: lock():unlock()
 		return func() func() {
-			// TODO: adquirir a luego b
+
+			a.Lock()
+			b.Lock()
 
 			return func() {
-				// TODO: liberar b luego a
 
+				b.Unlock()
+				a.Unlock()
 			}
 		}
 	}
@@ -87,5 +94,5 @@ func main() {
 	// TODO: comenta/activa la versión que desees probar
 
 	// deadlock()      // <- provocará interbloqueo
-	seguroOrdenado()   // <- versión segura
+	seguroOrdenado() // <- versión segura
 }
