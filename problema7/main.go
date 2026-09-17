@@ -16,18 +16,26 @@ type trabajo struct {
 }
 
 type resultado struct {
-	ID       int
-	X        int
+	ID        int
+	X         int
 	Procesado int
 }
 
 func worker(id int, jobs <-chan trabajo, results chan<- resultado, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for j := range jobs {
-		// TODO: procesar j (simular trabajo con Sleep)
+
+		time.Sleep(300 * time.Millisecond)
+
+		r := resultado{
+			ID:        j.ID,
+			X:         j.X,
+			Procesado: j.X * 2, // ejemplo de procesamiento
+		}
 
 		fmt.Printf("[worker %d] procesa trabajo %d -> %d\n", id, j.ID, r.Procesado)
 		results <- r
+
 	}
 	fmt.Printf("[worker %d] no hay más trabajos\n", id)
 }
