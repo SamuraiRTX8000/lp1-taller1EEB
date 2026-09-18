@@ -15,20 +15,23 @@ import (
 type tenedor struct{ mu sync.Mutex }
 
 func filosofo(id int, izq, der *tenedor, wg *sync.WaitGroup) {
+	defer wg.Done()
+
 	// TODO: desarrolla el código para el filósofo
-	
+
 	fmt.Printf("[filósofo %d] satisfecho\n", id)
 }
 
 func pensar(id int) {
 	fmt.Printf("[filósofo %d] pensando...\n", id)
-	// TODO: simular tiempo de pensar
+	time.Sleep(300 * time.Millisecond) // Simular tiempo de pensar
 
 }
 
 func comer(id int) {
 	fmt.Printf("[filósofo %d] COMIENDO\n", id)
 	// TODO: simular tiempo de pensar
+	time.Sleep(300 * time.Millisecond)
 
 }
 
