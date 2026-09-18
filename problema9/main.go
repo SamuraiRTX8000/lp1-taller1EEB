@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"sync"
 	"time"
 )
@@ -12,15 +13,16 @@ import (
 // para evitar deadlock. También puedes limitar concurrencia (ej. mayordomo).
 // TODO: completa la lógica de toma/soltado de tenedores y bucle de pensar/comer.
 
-type tenedor struct{ mu sync.Mutex }
+type tenedor struct {
+	ID int //agrege id para poder identificar el tenedor
+	mu sync.Mutex
+}
 
 func filosofo(id int, izq, der *tenedor, wg *sync.WaitGroup) {
 	defer wg.Done()
 	numero := rand.Intn(100)
 	aBinario := aBinario(numero)
-	fmt.Printf("[filósofo %d] binario: %s\n", id, aBinario)
-
-	
+	fmt.Printf("[filósofo %d] en un futuro al %d lo llamaran en binario: %s\n", id, numero, aBinario)
 
 	fmt.Printf("[filósofo %d] satisfecho\n", id)
 }
@@ -46,12 +48,7 @@ func main() {
 	// crear tenedores
 	forks := make([]*tenedor, n)
 	for i := 0; i < n; i++ {
-
-
 		forks[i] = &tenedor{ID: i}
-}
-		
-
 	}
 
 	// lanzar filósofos
@@ -59,18 +56,21 @@ func main() {
 		izq := forks[i]
 		der := forks[(i+1)%n]
 		// TODO: lanzar goroutine para el filósofo i
+		go filosofo(i, izq, der, &wg)
 
 	}
 
 	wg.Wait()
 	fmt.Println("Todos los filósofos han comido sin deadlock.")
 
-	func aBinario(n int) string {
+}
+
+func aBinario(n int) string {
 
 	if n == 0 {
 		return "0"
 	}
-	
+
 	binario := ""
 
 	for n > 0 {
@@ -81,4 +81,3 @@ func main() {
 
 	return binario
 }
-
