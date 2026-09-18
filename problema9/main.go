@@ -46,7 +46,11 @@ func main() {
 	// crear tenedores
 	forks := make([]*tenedor, n)
 	for i := 0; i < n; i++ {
-		// TODO: inicializar cada tenedor i
+
+
+		forks[i] = &tenedor{ID: i}
+}
+		
 
 	}
 
@@ -77,4 +81,4 @@ func main() {
 
 	return binario
 }
-}
+
