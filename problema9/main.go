@@ -16,8 +16,11 @@ type tenedor struct{ mu sync.Mutex }
 
 func filosofo(id int, izq, der *tenedor, wg *sync.WaitGroup) {
 	defer wg.Done()
+	numero := rand.Intn(100)
+	aBinario := aBinario(numero)
+	fmt.Printf("[filósofo %d] binario: %s\n", id, aBinario)
 
-	// TODO: desarrolla el código para el filósofo
+	
 
 	fmt.Printf("[filósofo %d] satisfecho\n", id)
 }
@@ -30,7 +33,7 @@ func pensar(id int) {
 
 func comer(id int) {
 	fmt.Printf("[filósofo %d] COMIENDO\n", id)
-	// TODO: simular tiempo de pensar
+
 	time.Sleep(300 * time.Millisecond)
 
 }
@@ -57,4 +60,21 @@ func main() {
 
 	wg.Wait()
 	fmt.Println("Todos los filósofos han comido sin deadlock.")
+
+	func aBinario(n int) string {
+
+	if n == 0 {
+		return "0"
+	}
+	
+	binario := ""
+
+	for n > 0 {
+		residuo := n % 2
+		binario = fmt.Sprintf("%d%s", residuo, binario)
+		n = n / 2
+	}
+
+	return binario
+}
 }
